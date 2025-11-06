@@ -26,7 +26,7 @@ class DeduplicationService {
       // Atomic set NX EX
       const result = await this.redis.set(lockKey, instanceId, { NX: true, EX: this.LOCK_TTL });
       if (result === 'OK') {
-        console.log(`[CLAIM] ✓ ${instanceId} claimed ${eventId}`);
+        console.log(`[CLAIM]  ${instanceId} claimed ${eventId}`);
         return true;
       } else {
         const locker = await this.redis.get(lockKey);

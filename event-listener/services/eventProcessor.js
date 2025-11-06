@@ -36,11 +36,11 @@ class EventProcessor {
 
       await dedupService.markProcessed(eventId, this.instanceId);
       this.stats.processed++;
-      console.log(`[SUCCESS] ✓ ${eventId} processed by ${this.instanceId} in ${Date.now()-start}ms`);
+      console.log(`[SUCCESS]  ${eventId} processed by ${this.instanceId} in ${Date.now()-start}ms`);
       return { success: true, deduplicated: false, eventId, processingTime: Date.now() - start };
     } catch (err) {
       this.stats.failed++;
-      console.error(`[FAILED] ✗ Error processing ${eventId}:`, err.message);
+      console.error(`[FAILED]  Error processing ${eventId}:`, err.message);
       // release lock so others can try
       await dedupService.releaseLock(eventId);
       return { success: false, eventId, error: err.message };

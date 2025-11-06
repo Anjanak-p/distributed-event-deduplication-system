@@ -23,9 +23,9 @@ class RedisClient {
       console.error('Redis Error:', err.message);
       this.isConnected = false;
     });
-    this.client.on('connect', () => console.log('🔌 Connecting to Redis...'));
-    this.client.on('ready', () => { console.log('✓ Redis connected and ready'); this.isConnected = true; });
-    this.client.on('reconnecting', () => console.log('🔄 Redis reconnecting...'));
+    this.client.on('connect', () => console.log(' Connecting to Redis...'));
+    this.client.on('ready', () => { console.log('Redis connected and ready'); this.isConnected = true; });
+    this.client.on('reconnecting', () => console.log(' Redis reconnecting...'));
 
     await this.client.connect();
     return this.client;

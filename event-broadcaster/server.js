@@ -17,11 +17,11 @@ let eventCounter = 0;
 
 io.on('connection', (socket) => {
   connectedListeners++;
-  console.log(`✓ Listener connected. Total listeners: ${connectedListeners}`);
+  console.log(` Listener connected. Total listeners: ${connectedListeners}`);
 
   socket.on('disconnect', () => {
     connectedListeners--;
-    console.log(`✗ Listener disconnected. Total listeners: ${connectedListeners}`);
+    console.log(` Listener disconnected. Total listeners: ${connectedListeners}`);
   });
 });
 
@@ -47,7 +47,7 @@ function broadcastEvent() {
     sequenceNumber: ++eventCounter
   };
   io.emit('new-event', event);
-  console.log(`📡 Broadcasted: ${event.id} Type:${event.type} to ${connectedListeners} listeners`);
+  console.log(` Broadcasted: ${event.id} Type:${event.type} to ${connectedListeners} listeners`);
 }
 
 app.get('/health', (req,res) => {
@@ -56,7 +56,7 @@ app.get('/health', (req,res) => {
 
 app.post('/broadcast-burst', express.json(), (req,res) => {
   const count = parseInt(req.body.count) || 10;
-  console.log(`🚀 Broadcasting burst of ${count} events`);
+  console.log(` Broadcasting burst of ${count} events`);
   for (let i=0;i<count;i++){
     setTimeout(broadcastEvent, i*100);
   }
@@ -67,5 +67,5 @@ app.post('/broadcast-burst', express.json(), (req,res) => {
 setInterval(broadcastEvent, 3000);
 
 server.listen(PORT, () => {
-  console.log(`🎯 Event Broadcaster running on port ${PORT}`);
+  console.log(` Event Broadcaster running on port ${PORT}`);
 });
