@@ -12,9 +12,60 @@ The system includes:
 
 This project is designed for scalability, reliability, and resilience against message duplication in a distributed environment.
 
+## Architecture
 
+```text
+             ┌──────────────────────────┐
+             │        Broadcaster       │
+             │  Emits events via WS     │
+             └────────────┬─────────────┘
+                          │
+                    WebSocket Broadcast
+                          │
+              ┌───────────┴────────────┐
+              │                        │
+      ┌───────▼───────┐        ┌───────▼───────┐
+      │   Listener 1   │        │   Listener 2   │
+      │ Receives event │        │ Receives event │
+      └───────┬────────┘        └───────┬────────┘
+              │                         │
+              └──────────┬──────────────┘
+                         │
+                     ┌───▼───┐
+                     │ Redis │   → Distributed lock & deduplication
+                     └───┬───┘
+                         │
+                     ┌───▼──────────┐
+                     │ MongoDB      │   → Stores processed events
+                     └──────────────┘
 
+```
+### Where Deduplication Happens
+Deduplication occurs in **Redis**, during the **claim-and-process** stage.  
+When a listener receives an event:
+1. It tries to claim it in Redis using `SETNX (set if not exists)`.
+2. Only one listener succeeds.
+3. The winning listener processes and persists the event to MongoDB.
+4. A short TTL ensures that stale locks automatically expire if processing fails.
 
+This guarantees atomicity and prevents race conditions between concurrent listeners.
+
+## Pseudocode
+```bash
+onEvent(event):
+    if redis.SETNX(event.id, listener.id) == false:
+        return  // already claimed elsewhere
+
+    redis.EXPIRE(event.id, LOCK_TTL)
+
+    try:
+        process(event)
+        storeInMongo(event)
+    catch:
+        logError(event)
+    finally:
+        // lock expires automatically, ensuring cleanup
+```
 ## Tech Stack
 
 - **Node.js / Express.js** – Backend runtime and web framework.
