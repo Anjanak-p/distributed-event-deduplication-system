@@ -125,17 +125,17 @@ Open multiple terminal windows to simulate multiple listeners.
 Terminal A:
 ```bash
 cd distributed-event-deduplication/event-listener
-INSTANCE_ID=listener-1 PORT=3001 npm start
+$env:INSTANCE_ID="listener-1"; $env:PORT="3000"; npm start 
 ```
 
 Terminal B:
 ```bash
 cd distributed-event-deduplication/event-listener
-INSTANCE_ID=listener-2 PORT=3002 npm start
+$env:INSTANCE_ID="listener-2"; $env:PORT="3002"; npm start 
 ```
 
 Terminal C:
 ```bash
 cd distributed-event-deduplication/event-listener
-INSTANCE_ID=listener-3 PORT=3003 npm start
+$env:INSTANCE_ID="listener-3"; $env:PORT="3003"; npm start 
 ```
