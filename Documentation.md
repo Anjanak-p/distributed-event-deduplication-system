@@ -72,6 +72,7 @@ onEvent(event):
 - **Socket.io** – Real-time communication between broadcaster and listeners.
 - **Redis** – Distributed in-memory datastore for deduplication and locking.
 - **MongoDB** – Database for persistent storage of processed events.
+- **Docker** 
   
 
 
